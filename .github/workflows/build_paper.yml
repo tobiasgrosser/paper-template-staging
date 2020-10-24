@@ -112,3 +112,6 @@ jobs:
       with:
         publish_dir: .
         github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Check for `Type 3` Fonts
+      run: if `pdffonts camera.pdf | grep -Fxa "Type 1"`; then echo "Type 3 font detected"; fi
