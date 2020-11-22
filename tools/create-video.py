@@ -6,8 +6,6 @@ import math
 import sys
 import shutil
 
-video = "/home/grosser/Downloads/paper.pdf"
-
 def getPageNumber(name):
     files = os.listdir(os.path.dirname(name))
     files = filter(lambda f: f.startswith(os.path.basename(name)), files)
