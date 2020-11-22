@@ -6,8 +6,6 @@ import math
 import sys
 import shutil
 
-video = "/home/grosser/Downloads/paper.pdf"
-
 def getPageNumber(name):
     files = os.listdir(os.path.dirname(name))
     files = filter(lambda f: f.startswith(os.path.basename(name)), files)
@@ -53,8 +51,6 @@ def createImageOfPaper(path, width = 6, pages = 18):
     cmd.append(name + "-full.png")
     run(cmd)
 
-imagePath = "tobiasgrosser/paper-template-staging/refs/heads/"
-
 def getReleases(path):
     releases = os.listdir(path)
     releases = filter(lambda x: x.find('master-release') != -1, releases)
@@ -92,6 +88,13 @@ def createVideo(path):
     run(cmd)
     print(path + 'video.mp4')
 
+import argparse
+
+parser = argparse.ArgumentParser(description='Create a Video from a GitHub Release Download of tobiasgrosser/paper-template.')
+parser.add_argument('repo', help='owner/repo, e.g., tobias-grosser/paper-template')
+
+args = parser.parse_args()
+imagePath = args.repo
 createImages(imagePath)
 moveImages(imagePath)
 createVideo(imagePath)
