@@ -31,6 +31,16 @@
   \documentclass[sigplan]{acmart}\settopmatter{}
 \fi
 
+\usepackage{colortbl}
+
+% 'draftonly' environment
+\usepackage{environ}
+\ifx\paperversion\paperversiondraft
+\newenvironment{draftonly}{}{}
+\else
+\NewEnviron{draftonly}{}
+\fi
+
 % Most PL conferences are edited by conference-publishing.com. Follow their
 % advice to add the following packages.
 %
@@ -49,6 +59,7 @@
 \usepackage{xifthen, xstring}
 \usepackage{ulem}
 \usepackage{xspace}
+\usepackage{marginnote}
 \makeatletter
 \font\uwavefont=lasyb10 scaled 652
 
@@ -60,13 +71,22 @@
 \def\tmpdefault{emptystring}
 \expandafter\newcommand\csname #1\endcsname[2][\tmpdefault]{\def\tmp{##1}\ifthenelse{\equal{\tmp}{\tmpdefault}}
    {\todo[linecolor=#2,backgroundcolor=#2,bordercolor=#2]{\textbf{#1:} ##2}}
-   {\ifthenelse{\equal{##2}{}}{\colorwave[#2]{##1}\xspace}{ \todo[linecolor=#2,backgroundcolor=#2,bordercolor=#2]{\textbf{#1:} ##2}\colorwave[#2]{##1}}}}}
+   {\ifthenelse{\equal{##2}{}}{\colorwave[#2]{##1}\xspace}{\todo[linecolor=#2,backgroundcolor=#2,bordercolor=#2]{\textbf{#1:} ##2}\colorwave[#2]{##1}}}}
+\expandafter\newcommand\csname #1f\endcsname[2][\tmpdefault]{
+	\marginnote{
+		\todo[inline,linecolor=#2,backgroundcolor=#2,bordercolor=#2]{\textbf{#1 (Figure):} ##2}}
+   }
+}
+
 \else
 \newcommand\createtodoauthor[2]{%
 \def\tmpdefault{emptystring}
 \expandafter\newcommand\csname #1\endcsname[2][\tmpdefault]{\def\tmp{##1}\ifthenelse{\equal{\tmp}{\tmpdefault}}
    {}
-   {\ifthenelse{\equal{##2}{}}{##1\xspace}{ ##1}}}}
+   {\ifthenelse{\equal{##2}{}}{##1\xspace}{##1}}}
+\expandafter\newcommand\csname #1f\endcsname[2][\tmpdefault]{
+   }
+   }
 \fi
 
 % Broaden margins to make room for todo notes
@@ -86,6 +106,8 @@
 %
 % https://colorbrewer2.org/#type=qualitative&scheme=Paired&n=4
 
+\definecolor{pairedNegOneLightGray}{HTML}{cacaca}
+\definecolor{pairedNegTwoDarkGray}{HTML}{827b7b}
 \definecolor{pairedOneLightBlue}{HTML}{a6cee3}
 \definecolor{pairedTwoDarkBlue}{HTML}{1f78b4}
 \definecolor{pairedThreeLightGreen}{HTML}{b2df8a}
@@ -99,6 +121,21 @@
 \createtodoauthor{authorFour}{pairedFourDarkGreen}
 \createtodoauthor{authorFive}{pairedFiveLightRed}
 \createtodoauthor{authorSix}{pairedSixDarkRed}
+
+% Print \autoref as "Section X.Y.Z"
+\renewcommand*{\sectionautorefname}{Section}
+\renewcommand*{\subsectionautorefname}{Section}
+\renewcommand*{\subsubsectionautorefname}{Section}
+
+% \circled command to print a colored circle.
+% \circled{1} pretty-prints "(1)"
+% This is useful to refer to labels that are embedded within figures.
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,fill=pairedOneLightBlue,inner sep=1pt] (char) {#1};}}
+
 
 %% Note: Authors migrating a paper from traditional SIGPLAN
 %% proceedings format to PACMPL format should change 'sigplan' to
@@ -311,6 +348,7 @@ which should not introduce overlong white space sequences.
 % https://docs.google.com/drawings/d/1juKp43D3rLC-luBQPwQZ_wCnDK2S_6C1k6USV0wKE0g/edit?usp=sharing
 \includegraphics[width=\columnwidth]{images/overview.pdf}
 \caption{Our key idea visualized}
+\grosserf{Replace this figure with your own drawing.}
 \end{figure}
 
 ~\\
@@ -332,8 +370,6 @@ the remaining paper should be to support the claims stated here.
 \lipsum[1-3]
 
 \section{Implementation}
-
-\lipsum[1-3]
 
 \section{Related Work}
 
@@ -371,9 +407,66 @@ the remaining paper should be to support the claims stated here.
 
 
 %% Appendix
+\newpage
 \appendix
-\section{Appendix}
+\begin{draftonly}
+\section{Formatting Guidelines}
 
-Text of appendix \ldots
+These formatting guidelines aim to standartize our writing. They ensure that
+papers with multiple authors have a consistent look and that commonly occuring
+items are formatted in ways that are known to work well.
+
+\subsection{Figures}
+
+\paragraph{Color Scheme} 
+
+In Figures we use a color scheme that is print-friendly and also visible
+with red-green blindness. The following colors are all print-friendly
+and red-green save when only using Color 1-4:
+
+\medskip
+{
+	\small
+\newcolumntype{a}{>{\columncolor{pairedOneLightBlue}}c}
+\newcolumntype{b}{>{\columncolor{pairedTwoDarkBlue}}c}
+\newcolumntype{d}{>{\columncolor{pairedThreeLightGreen}}c}
+\newcolumntype{e}{>{\columncolor{pairedFourDarkGreen}}c}
+\newcolumntype{f}{>{\columncolor{pairedFiveLightRed}}c}
+\newcolumntype{g}{>{\columncolor{pairedSixDarkRed}}c}
+
+\begin{tabular}{a b d e f g}
+Color 1 & Color 2 & Color 3 & Color 4 & Color 5 & Color 6\\
+\#a6cee3 & \#1f78b4 & \#b2df8a & \#33a02c & \#fb9a99 & \#e31a1c
+\end{tabular}
+}
+
+We de-emphasize components in figures by using additionally two shades of gray.
+Especially in complex figures, it is often helpful to de-emphasize visual
+elements that we want to represent but that should not be the focus of a
+reader's attention.
+
+\medskip
+{
+	\small
+\newcolumntype{h}{>{\columncolor{pairedNegOneLightGray}}c}
+\newcolumntype{i}{>{\columncolor{pairedNegTwoDarkGray}}c}
+
+\begin{tabular}{h i}
+Color -1 & Color -2\\
+\#cacaca & \#827b7b\\
+\end{tabular}
+}
+
+Single-color graphs are plotted in Color 1 - Light Blue.
+
+\paragraph{Labels in Figures}
+Complex diagrams often benefit from labels inside the diagrams. We suggest to
+use a filled circle (e.g, in light blue) to highlight these numbers and use
+these references, e.g., \circled{1} implemented as \texttt{\textbackslash{}circled\{1\}}, in the text to refer to them.
+
+\paragraph{PlottingMatplotlib}
+For plotting we use matplotlib.
+\end{draftonly}
+
 
 \end{document}
