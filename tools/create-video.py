@@ -47,6 +47,7 @@ def createImageOfPaper(path, width = 7, pages = 21):
         cmd.append(name + "-tmp-row-" + str(row) + ".png")
         run(cmd)
 
+    run(['ls', os.path.dirname(path)])
     cmd = ['convert']
     for row in range(0, math.ceil(pages / width)):
       cmd.append(name + "-tmp-row-" + str(row) + ".png")
