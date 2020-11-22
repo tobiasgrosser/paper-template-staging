@@ -47,7 +47,6 @@ def createImageOfPaper(path, width = 7, pages = 21):
         cmd.append(name + "-tmp-row-" + str(row) + ".png")
         run(cmd)
 
-    run(['ls', os.path.dirname(path)])
     cmd = ['convert']
     for row in range(0, math.ceil(pages / width)):
       cmd.append(name + "-tmp-row-" + str(row) + ".png")
@@ -69,12 +68,13 @@ def getReleases(path):
     releases = list(releases)
     return list(releases)
 
+from multiprocessing import Pool
 
 def createImages(path):
     releases = getReleases(path)
 
-    for release in releases:
-        createImageOfPaper(release)
+    with Pool(4) as p:
+        p.map(createImageOfPaper, releases)
 
 def moveImages(path):
     removePNGFiles(path)
