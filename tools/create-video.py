@@ -53,7 +53,7 @@ def createImageOfPaper(path, width = 6, pages = 18):
     cmd.append(name + "-full.png")
     run(cmd)
 
-imagePath = "tobiasgrosser/paper-declarative-mlir-compiler/refs/heads/"
+imagePath = "tobiasgrosser/paper-template-staging/refs/heads/"
 
 def getReleases(path):
     releases = os.listdir(path)
