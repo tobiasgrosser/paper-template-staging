@@ -19,5 +19,14 @@ jobs:
     - name: Install GitHub Release Downloader
       run: sudo npm install -g github-release-downloader
 
+    - name: Install FFMPEG
+      run: apt install ffmpeg
+
+    - name: Install ImageMagick
+      run: apt install imagemagick
+
     - name: Download artefacts
       run: grd --token ${{ secrets.GITHUB_TOKEN }} --owner ${GITHUB_REPOSITORY_OWNER} --repository ${GITHUB_REPOSITORY_NAME}	 --timeout 3000 --parallel 20
+
+    - name: Create Video
+      run: tools/create-video.py
