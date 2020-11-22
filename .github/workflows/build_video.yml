@@ -17,3 +17,6 @@ jobs:
     steps:
     - name: Install GitHub Release Downloader
       run: sudo npm install -g github-release-downloader
+
+    - name: Download artefacts
+      run: grd --token 71337da6b12ae486195a3636b9dba58f2138b2df --owner tobiasgrosser --repository paper-declarative-mlir-compiler --timeout 3000 --parallel 20
