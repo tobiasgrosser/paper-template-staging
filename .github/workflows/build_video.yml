@@ -35,7 +35,7 @@ jobs:
       run: sudo mv /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xmlout
 
     - name: Create Video
-      run: tools/create-video.py
+      run: tools/create-video.py --repo ${GITHUB_REPOSITORY_OWNER}/${GITHUB_REPOSITORY_NAME}
 
     - name: Create Release
       id: create_release
