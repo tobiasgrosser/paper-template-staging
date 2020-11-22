@@ -15,8 +15,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+    - uses: FranzDiebold/github-env-vars-action@v1.2.1
     - name: Install GitHub Release Downloader
       run: sudo npm install -g github-release-downloader
 
     - name: Download artefacts
-      run: grd --token 71337da6b12ae486195a3636b9dba58f2138b2df --owner tobiasgrosser --repository paper-declarative-mlir-compiler --timeout 3000 --parallel 20
+      run: grd --token ${{ secrets.GITHUB_TOKEN }} --owner ${{ GITHUB_REPOSITORY_OWNER }} --repository ${{ GITHUB_REPOSITORY_NAME }}	 --timeout 3000 --parallel 20
