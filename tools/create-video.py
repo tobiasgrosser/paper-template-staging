@@ -94,7 +94,7 @@ parser = argparse.ArgumentParser(description='Create a Video from a GitHub Relea
 parser.add_argument('repo', help='owner/repo, e.g., tobias-grosser/paper-template')
 
 args = parser.parse_args()
-imagePath = args.repo
+imagePath = args.repo + "/refs/heads/"
 createImages(imagePath)
 moveImages(imagePath)
 createVideo(imagePath)
